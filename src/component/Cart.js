@@ -1,33 +1,192 @@
-import React from 'react';
-import { CartContext } from './context/CartContext';
-import { Typography, Button, Grid } from '@mui/material';
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem, removeItem, deleteItem, clearCart } from "../redux/cartSlice";
+import { Button, Snackbar, Alert, Drawer } from "@mui/material";
 
-const Cart = () => {
-  const { cartItems, removeFromCart } = CartContext;
+const Cart = ({ drawerOpen, toggleDrawer }) => {
+  const items = useSelector((state) => state.cart.items);
+  const totalAmount = useSelector((state) => state.cart.totalAmount);
+  const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
+  const dispatch = useDispatch();
 
-  if (cartItems.length === 0) {
-    return <Typography variant="h6">Your cart is empty</Typography>;
-  }
+  const [open, setOpen] = React.useState(false);
+  const [message, setMessage] = React.useState("");
+  const [severity, setSeverity] = React.useState("success");
+
+  const handleAdd = (item) => {
+    dispatch(addItem(item));
+  };
+
+  const handleRemove = (item) => {
+    dispatch(removeItem(item));
+  };
+
+  const handleDelete = (itemId) => {
+    dispatch(deleteItem(itemId));
+  };
+
+  const handleCheckout = () => {
+    if (items.length > 0) {
+      setMessage("Your order is successfully processed!");
+      setSeverity("success");
+      setOpen(true);
+      dispatch(clearCart(items));
+
+    } else {
+      setMessage("Please add some products to the cart.");
+      setSeverity("warning");
+      setOpen(true);
+    }
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
 
   return (
     <div>
-      <Typography variant="h4">Your Cart</Typography>
-      <Grid container spacing={2}>
-        {cartItems.map((item, index) => (
-          <Grid item xs={12} key={index}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-              <Typography variant="h6">
-                {item.title} - {item.price}
-              </Typography>
-              <Button variant="outlined" color="secondary" onClick={() => removeFromCart(item.title)}>
-                Remove
-              </Button>
+      <Drawer
+        anchor="right"
+        open={drawerOpen}
+        onClose={() => toggleDrawer(false)}
+      >
+        <div style={styles.cartContainer}>
+          <h2 style={styles.heading}>Your Cart</h2>
+          <table style={styles.table}>
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Add</th>
+                <th>Remove</th>
+                <th>Delete</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map((item) => (
+                <tr key={item.id} style={styles.row}>
+                  <td>
+                    <img
+                      src={item.image}
+                      alt={item.title}
+                      style={styles.image}
+                    />
+                  </td>
+                  <td>{item.title}</td>
+                  <td>{item.quantity}</td>
+                  <td>${item.price * item.quantity}</td>
+                  <td>
+                    <button
+                      onClick={() => handleAdd(item)}
+                      style={styles.button}
+                    >
+                      +
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleRemove(item)}
+                      style={styles.button}
+                    >
+                      -
+                    </button>
+                  </td>
+                  <td>
+                    <button
+                      onClick={() => handleDelete(item.id)}
+                      style={styles.deleteButton}
+                    >
+                      DELETE
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          <div style={styles.summaryContainer}>
+            <div style={styles.summaryBox}>
+              <p>Total Quantity: {totalQuantity}</p>
+              <p>Total Bill: ${totalAmount}</p>
             </div>
-          </Grid>
-        ))}
-      </Grid>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={handleCheckout}
+              style={styles.checkoutButton}
+            >
+              CHECKOUT ITEMS
+            </Button>
+          </div>
+        </div>
+      </Drawer>
+
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={severity}>
+          {message}
+        </Alert>
+      </Snackbar>
     </div>
   );
+};
+
+const styles = {
+  cartContainer: {
+    padding: "20px",
+    width: "400px",
+    maxWidth: "100%",
+    backgroundColor: "#f9f9f9",
+  },
+
+  heading: { color: "#E91E63", textAlign: "center" },
+
+  table: { width: "100%", borderCollapse: "collapse", marginBottom: "20px" },
+
+  row: { textAlign: "center" },
+  image: {
+    width: "50px",
+    height: "50px",
+    objectFit: "cover",
+    borderRadius: "5px",
+  },
+
+  button: {
+    padding: "5px 10px",
+    backgroundColor: "#f0f0f0",
+    border: "1px solid #ccc",
+    cursor: "pointer",
+  },
+
+  deleteButton: {
+    padding: "5px 10px",
+    backgroundColor: "#ff4d4d",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+    borderRadius: "5px",
+  },
+  summaryContainer: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginTop: "20px",
+  },
+  summaryBox: {
+    backgroundColor: "#ff3366",
+    color: "#fff",
+    padding: "10px",
+    borderRadius: "5px",
+  },
+  checkoutButton: {
+    padding: "10px 20px",
+    backgroundColor: "#E91E63",
+    color: "#fff",
+    border: "none",
+    cursor: "pointer",
+    borderRadius: "5px",
+  },
 };
 
 export default Cart;

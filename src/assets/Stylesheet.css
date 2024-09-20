@@ -44,3 +44,146 @@
   .Navbar{
     background-color: black;
   }
+
+
+
+  /* --------------------------------------------------Header-------------------------- */
+
+
+
+.header-container {
+  position: relative;
+  width: 100%;
+  max-height: 600px;
+  text-align: center;
+}
+
+.header-image {
+  width: 100%;
+  height: 600px;
+  /* height: 500px; */
+  display: block;
+  object-fit: cover;
+  opacity: 0.8; 
+}
+
+.header-heading {
+  position: absolute;
+  top: 0px;
+  left: 50px;
+
+  
+  transform: translate(-50%, -50%);
+  font-size: 3rem;
+  font-weight: bold;
+  color: black;
+
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5); 
+}
+
+.header-paragraph {
+  position: absolute;
+ 
+
+  top: 55%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  color: black;
+  font-size: 1.25rem;
+  line-height: 1.6;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
+  opacity: 0; 
+}
+
+.header-paragraph.animate__animated.animate__fadeInUp {
+  width: 40%;
+  top: 96px;
+  left: 53px;
+  /* top: 149px;
+  left: 40px; */
+  opacity: 1;
+  animation-delay: 2s; 
+}
+#header-img{
+  top: 12px;
+}
+
+
+
+/* Navbar Responsive */
+/* Base styles for the navbar */
+.navbar-links {
+  display: flex;
+  gap: 10px;
+}
+
+.nav-link-item {
+  text-decoration: none;
+}
+
+/* Styles for the AppBar */
+.MuiAppBar-root {
+  background-color: #030200;
+  height: 100px;
+}
+
+/* Make sure the Toolbar takes up full width */
+.MuiToolbar-root {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+}
+
+/* Make Button elements within the Toolbar responsive */
+.MuiButton-root {
+  margin: 0 5px;
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .MuiToolbar-root {
+    flex-direction: column;
+    align-items: flex-start;
+    height: auto;
+  }
+
+  .navbar-links {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .nav-link-item {
+    width: 100%;
+    text-align: center;
+    margin: 5px 0;
+  }
+
+  .MuiAppBar-root {
+    height: auto;
+  }
+}
+
+@media (max-width: 1000px) {
+  .MuiToolbar-root {
+    padding: 0 10px;
+    margin-left: 23px;
+  }
+
+  .nav-link-item {
+    font-size: 14px;
+  }
+}
+/* @media (max-width: 480px) {
+  .MuiToolbar-root {
+    padding: 0 10px;
+  }
+
+  .nav-link-item {
+    font-size: 14px;
+  }
+} */
+
+
+

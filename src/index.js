@@ -24,15 +24,18 @@ import React from "react";
 import ReactDOM from "react-dom";
 
 import { BrowserRouter } from "react-router-dom";
-import { CartProvider } from "./component/context/CartContext";
 import "./index.css";
+import { store } from './redux/store';
+import { Provider } from 'react-redux';
+
 import App from "./App";
 
 ReactDOM.render(
 <BrowserRouter>
-  <CartProvider> 
+<Provider store={store}>
+
     <App />
-  </CartProvider>
+  </Provider>,
  </BrowserRouter>,
   document.getElementById("root")
 );
