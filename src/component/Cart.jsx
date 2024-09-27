@@ -1,51 +1,56 @@
 import React from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { addItem, removeItem, deleteItem, clearCart } from "../redux/cartSlice";
-import { Button, Snackbar, Alert, Drawer } from "@mui/material";
+import {
+  increaseItem,
+  decreaseItem,
+  deleteItem,
+  checkout,
+} from "../redux/cartSlice";
+import { Button, Drawer, IconButton, Snackbar } from "@mui/material";
+import CloseIcon from "@mui/icons-material/Close";
 
 const Cart = ({ drawerOpen, toggleDrawer }) => {
-  const items = useSelector((state) => state.cart.items);
-  const totalAmount = useSelector((state) => state.cart.totalAmount);
-  const totalQuantity = items.reduce((acc, item) => acc + item.quantity, 0);
   const dispatch = useDispatch();
-
-  const [open, setOpen] = React.useState(false);
+  const cartItems = useSelector((state) => state.cart.items);
+  const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+  const totalAmount = useSelector((state) => state.cart.totalAmount);
   const [message, setMessage] = React.useState("");
   const [severity, setSeverity] = React.useState("success");
+  const [openSnackbar, setOpenSnackbar] = React.useState(false);
 
-  const handleAdd = (item) => {
-    dispatch(addItem(item));
+  const [open, setOpen] = React.useState(false);
+  const handleIncrease = (id) => {
+    dispatch(increaseItem(id));
   };
 
-  const handleRemove = (item) => {
-    dispatch(removeItem(item));
+  const handleDecrease = (id) => {
+    dispatch(decreaseItem(id));
   };
 
-  const handleDelete = (itemId) => {
-    dispatch(deleteItem(itemId));
+  const handleDelete = (id) => {
+    dispatch(deleteItem(id));
   };
-
   const handleCheckout = () => {
-    if (items.length > 0) {
+    if (cartItems.length > 0) {
       setMessage("Your order is successfully processed!");
       setSeverity("success");
-      setOpen(true);
-      dispatch(clearCart(items));
-
+      dispatch(checkout());
+      setOpenSnackbar(true);
     } else {
       setMessage("Please add some products to the cart.");
       setSeverity("warning");
-      setOpen(true);
+      setOpenSnackbar(true);
     }
   };
 
-  const handleClose = () => {
-    setOpen(false);
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   return (
     <div>
       <Drawer
+        style={{ width: "700px" }}
         anchor="right"
         open={drawerOpen}
         onClose={() => toggleDrawer(false)}
@@ -65,7 +70,7 @@ const Cart = ({ drawerOpen, toggleDrawer }) => {
               </tr>
             </thead>
             <tbody>
-              {items.map((item) => (
+              {cartItems.map((item) => (
                 <tr key={item.id} style={styles.row}>
                   <td>
                     <img
@@ -79,7 +84,8 @@ const Cart = ({ drawerOpen, toggleDrawer }) => {
                   <td>${item.price * item.quantity}</td>
                   <td>
                     <button
-                      onClick={() => handleAdd(item)}
+                      onClick={() => handleIncrease(item.id)}
+                      disabled={item.stock === 0}
                       style={styles.button}
                     >
                       +
@@ -87,7 +93,8 @@ const Cart = ({ drawerOpen, toggleDrawer }) => {
                   </td>
                   <td>
                     <button
-                      onClick={() => handleRemove(item)}
+                      onClick={() => handleDecrease(item.id)}
+                      
                       style={styles.button}
                     >
                       -
@@ -115,19 +122,39 @@ const Cart = ({ drawerOpen, toggleDrawer }) => {
               variant="contained"
               color="primary"
               onClick={handleCheckout}
+              disabled={cartItems.length === 0}
               style={styles.checkoutButton}
             >
               CHECKOUT ITEMS
             </Button>
+            {open && (
+              <div
+                style={{ color: severity === "success" ? "green" : "orange" }}
+              >
+                {message}
+              </div>
+            )}
           </div>
         </div>
+        <Snackbar
+          anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+          open={openSnackbar}
+          autoHideDuration={3000}
+          onClose={handleCloseSnackbar}
+          message={message}
+          action={
+            <>
+              <IconButton
+                size="small"
+                color="inherit"
+                onClick={handleCloseSnackbar}
+              >
+                <CloseIcon fontSize="small" />
+              </IconButton>
+            </>
+          }
+        />
       </Drawer>
-
-      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={severity}>
-          {message}
-        </Alert>
-      </Snackbar>
     </div>
   );
 };

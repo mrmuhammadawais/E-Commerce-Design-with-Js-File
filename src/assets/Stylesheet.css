@@ -3,54 +3,6 @@
     width: 100%;
     height: 500px;
 }
-/* .nav-link-item{
-    margin-left: 25px !important; 
-    color: white !important;
-    list-style: none;
-}
-
-.nav-link-item,Button{
-    color: aquamarine;
-
-}
-.navbar-links{
-    color: antiquewhite;
-} */
-.navbar-links {
-    display: flex;
-    gap: 15px; /* Adds spacing between buttons */
-  }
-  
-  .nav-link-item {
-    text-transform: none; 
-    /* background-color: gray; */
-    color: white;
-    padding: 8px 16px;
-    text-decoration: none;
-  }
-  
-  .nav-link-item a {
-    text-decoration: none;
-    color: white;
-  }
-  
-  .nav-link-item a:hover {
-    color: lightgray; /* Changes color on hover */
-  }
-  
-  .MuiAppBar-root {
-    background-color: gray; /* Sets the background color of the AppBar */
-  }
-  .Navbar{
-    background-color: black;
-  }
-
-
-
-  /* --------------------------------------------------Header-------------------------- */
-
-
-
 .header-container {
   position: relative;
   width: 100%;
@@ -100,8 +52,6 @@
   width: 40%;
   top: 96px;
   left: 53px;
-  /* top: 149px;
-  left: 40px; */
   opacity: 1;
   animation-delay: 2s; 
 }
@@ -110,9 +60,34 @@
 }
 
 
-
-/* Navbar Responsive */
-/* Base styles for the navbar */
+/*------------------------------ Navbar--------------------------------------------- */
+.navbar-links {
+    display: flex;
+    gap: 15px; 
+  }
+  
+  .nav-link-item {
+    text-transform: none; 
+    color: white;
+    padding: 8px 16px;
+    text-decoration: none;
+  }
+  
+  .nav-link-item a {
+    text-decoration: none;
+    color: white;
+  }
+  
+  .nav-link-item a:hover {
+    color: lightgray; 
+  }
+  
+  .MuiAppBar-root {
+    background-color: gray; 
+  }
+  .Navbar{
+    background-color: black;
+  }
 .navbar-links {
   display: flex;
   gap: 10px;
@@ -122,13 +97,11 @@
   text-decoration: none;
 }
 
-/* Styles for the AppBar */
 .MuiAppBar-root {
   background-color: #030200;
   height: 100px;
 }
 
-/* Make sure the Toolbar takes up full width */
 .MuiToolbar-root {
   display: flex;
   justify-content: space-between;
@@ -136,12 +109,10 @@
   padding: 0 20px;
 }
 
-/* Make Button elements within the Toolbar responsive */
 .MuiButton-root {
   margin: 0 5px;
 }
 
-/* Responsive Styles */
 @media (max-width: 768px) {
   .MuiToolbar-root {
     flex-direction: column;
@@ -175,15 +146,4 @@
     font-size: 14px;
   }
 }
-/* @media (max-width: 480px) {
-  .MuiToolbar-root {
-    padding: 0 10px;
-  }
-
-  .nav-link-item {
-    font-size: 14px;
-  }
-} */
-
-
 
